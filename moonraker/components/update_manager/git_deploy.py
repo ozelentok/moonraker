@@ -800,8 +800,7 @@ class GitRepo:
                 f"Git Repo {self.alias}: Cannot perform pull on a "
                 "detached HEAD")
         cmd = "pull --progress"
-        if self.server.is_debug_enabled():
-            cmd = f"{cmd} --rebase"
+        cmd = f"{cmd} -f --rebase"
         if self.channel != Channel.DEV or self.pinned_commit is not None:
             cmd = f"{cmd} {self.git_remote} {self.upstream_commit}"
         async with self.git_operation_lock:
