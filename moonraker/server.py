@@ -95,8 +95,7 @@ class Server:
         # Configure Debug Logging
         config.getboolean('enable_debug_logging', False, deprecate=True)
         self.debug = args["debug"]
-        log_level = logging.DEBUG if args["verbose"] else logging.INFO
-        logging.getLogger().setLevel(log_level)
+        logging.getLogger().setLevel(args["log_level"])
         self.event_loop.set_debug(args["asyncio_debug"])
         self.klippy_connection: KlippyConnection
         self.klippy_connection = self.load_component(config, "klippy_connection")
@@ -645,6 +644,12 @@ def main(from_package: bool = True) -> None:
         help="Enable verbose logging"
     )
     parser.add_argument(
+        "-p", "--log-level",
+        choices=["critical", "error", "warning", "info", "debug"],
+        default="warning",
+        help="Logging log level"
+    )
+    parser.add_argument(
         "-g", "--debug",
         action='store_const',
         const=True,
@@ -696,6 +701,7 @@ def main(from_package: bool = True) -> None:
         "config_file": cfg_file,
         "backup_config": confighelper.find_config_backup(cfg_file),
         "startup_warnings": startup_warnings,
+        "log_level": cmd_line_args.log_level.upper(),
         "verbose": cmd_line_args.verbose,
         "debug": cmd_line_args.debug,
         "asyncio_debug": cmd_line_args.asyncio_debug,

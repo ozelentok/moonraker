@@ -123,7 +123,7 @@ class LogManager:
         queue: Queue = Queue()
         queue_handler = LocalQueueHandler(queue)
         root_logger.addHandler(queue_handler)
-        root_logger.setLevel(logging.INFO)
+        root_logger.setLevel(app_args["log_level"])
         stdout_hdlr = logging.StreamHandler(sys.stdout)
         stdout_fmt = logging.Formatter(
             '[%(filename)s:%(funcName)s()] - %(message)s')
